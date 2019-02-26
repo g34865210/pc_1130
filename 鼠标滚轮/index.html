@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1130</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+<div id="wrap">
+    <header id="header">
+        <div class="headmian">
+            <h1 class="logo">
+                <a href="http://www.atguigu.com">
+                    <img src="img/logo.png" alt="">
+                </a>
+            </h1>
+            <div class="music">
+                <audio src="img/audio.mp3"></audio>
+            </div>
+            <nav class="nav">
+                <ul class="navlist">
+                    <li class="navitem">
+                        <a href="javascript:;">
+                            <div class="up"><img src="img/home_gruen.png" alt=""></div>
+                            <div class="down"><img src="img/home.png" alt=""></div>
+                        </a>
+                    </li>
+                    <li class="navitem">
+                        <a href="javascript:;">
+                            <div class="up">Course</div>
+                            <div class="down">Course</div>
+                        </a>
+                    </li>
+                    <li class="navitem">
+                        <a href="javascript:;">
+                            <div class="up">Works</div>
+                            <div class="down">Works</div>
+                        </a>
+                    </li>
+                    <li class="navitem">
+                        <a href="javascript:;">
+                            <div class="up">About</div>
+                            <div class="down">About</div>
+                        </a>
+                    </li>
+                    <li class="navitem">
+                        <a href="javascript:;">
+                            <div class="up">Team</div>
+                            <div class="down">Team</div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="arrow"></div>
+        </div>
+    </header>
+    <section id="content">
+        <ul class="contentList">
+            <li class="contentItem">
+                <div class="contentInner">
+                    home
+                </div>
+            </li>
+            <li class="contentItem">
+                <div class="contentInner">
+                    course
+                </div>
+            </li>
+            <li class="contentItem">
+                <div class="contentInner">
+                    work
+                </div>
+            </li>
+            <li class="contentItem">
+                <div class="contentInner">
+                    about
+                </div>
+            </li>
+            <li class="contentItem">
+                <div class="contentInner">
+                    team
+                </div>
+            </li>
+        </ul>
+    </section>
+</div>
+</body>
+<script type="text/javascript">
+    window.onload = function () {
+        var head = document.getElementById('header');
+        var arrow = document.querySelector('#header .headmian .arrow');
+        var navUps = document.querySelectorAll('#header .headmian .nav .navitem .up');
+        var navItems = document.querySelectorAll('#header .headmian .nav .navitem ');
+        var myAudio = document.querySelector('#header .headmian .music>audio');
+        var myMusic = document.querySelector('#header .headmian .music');
+        var content = document.getElementById('content');
+        var contentItems = document.querySelectorAll('#content .contentItem');
+        var contentList = document.querySelector('#content .contentList');
+        var index = 0;
+        // 第一个up元素高亮
+        navUps[0].style.width = '100%';
+        // 小三角第一个位置
+        arrow.style.left = navItems[0].getBoundingClientRect().left + navItems[0].offsetWidth/2 + 'px';
+        // 循环绑定点击事件
+
+        for (var i = 0; i < navItems.length; i++) {
+            var item = navItems[i];
+            item.index = i;
+            item.onclick = function () {
+                index = this.index;
+               contentMove(this.index);
+            }
+        }
+
+        // 屏幕移动
+            function contentMove(index) {
+                for (var j = 0; j < navUps.length; j++) {
+                    navUps[j].style.width = '';
+                }
+                navUps[index].style.width = '100%';
+                arrow.style.left = navItems[index].getBoundingClientRect().left + navItems[index].offsetWidth/2 + 'px';
+
+                contentList.style.top = -(index)*(document.documentElement.clientHeight - head.offsetHeight) + 'px';
+            }
+
+        myMusic.onclick = function () {
+            if(myAudio.paused){
+                myAudio.play();
+                myMusic.style.backgroundImage = 'url("img/musicon.gif")';
+            } else {
+                myAudio.pause();
+                myMusic.style.backgroundImage = 'url("img/musicoff.gif")';
+            }
+        }
+
+        content.style.height = document.documentElement.clientHeight - head.offsetHeight + 'px';
+
+        for (var i = 0; i < contentItems.length; i++) {
+            contentItems[i].style.height = content.style.height;
+
+        }
+
+        // ie/Chrome
+        document.onmousewheel = scrollMove;
+        // firfox
+        if(document.addEventListener){
+            document.addEventListener('DOMMouseScroll',scrollMove);
+        }
+        function scrollMove(event) {
+            event = event || window.event;
+            var flag = '';
+            if(event.wheelDelta){
+                //ie/chrome
+                if(event.wheelDelta > 0){
+                    //上
+                    flag = 'up';
+                }else {
+                    //下
+                    flag = 'down'
+                }
+            }
+            else if(event.detail){
+                //firefox
+                if(event.detail < 0){
+                    //上
+                    flag = 'up';
+                }else {
+                    //下
+                    flag = 'down'
+                }
+            }
+            //最终判断滚轮的方向
+            switch (flag){
+                case 'up':
+                    //滚轮向上滚动
+                    if(index>0){
+                        index--;
+                        contentMove(index)
+                    }
+                    break;
+                case 'down':
+                    //滚轮向下滚动
+                    if(index < navItems.length-1){
+                        index++;
+                        contentMove(index)
+                    }
+                    break;
+            }
+
+            //取消默认行为
+            event.preventDefault && event.preventDefault();
+            return false;
+        }
+
+
+    }
+</script>
+</html>
