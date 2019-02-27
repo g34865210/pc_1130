@@ -324,7 +324,7 @@
         // document.onmousewheel = scrollMove;
         document.onmousewheel = function (e) {
             clearTimeout(timer);
-            timer = setInterval(function () {
+            timer = setTimeout(function () {
                 scrollMove(e);
             },200)
         }
@@ -332,7 +332,7 @@
         if(document.addEventListener){
             document.addEventListener('DOMMouseScroll',function (e) {
                 clearTimeout(timer);
-                timer = setInterval(function () {
+                timer = setTimeout(function () {
                     scrollMove(e);
                 },200)
             });
